@@ -7,19 +7,31 @@ import java.util.List;
 public class Client {
 	private ArrayList<Farm> farms;
 	private String name;
-	private String filepath;
+	private File file;
 	
-	public Client(String name, String filepath){
+	public Client(String name, File file){
 		this.name = name;
-		this.filepath = filepath;
+		this.file = file;
         farms = new ArrayList<Farm>();
 		
         //Read each farm directory from the client directory
-        for (File farm : new File(filepath).listFiles()) {
+        for (File farm : file.listFiles()) {
 	        if (farm.isDirectory()) {
-	        	farms.add(new Farm(farm.getName(), farm.getAbsolutePath()));
+	        	farms.add(new Farm(farm.getName(), farm));
 	        }
         }
+	}
+	
+	public boolean renameClient(String newname){
+		boolean result = file.renameTo(new File(file.getParent() + "/" + newname));
+		if(result){
+			file = new File(file.getParent() + "/" + newname);
+			this.name = newname;
+			for(Farm f:farms){
+				f.changeParentDir(file.getAbsolutePath());
+			}
+		}
+		return result;
 	}
 	
 	public void addFarm(Farm farm){
@@ -42,7 +54,7 @@ public class Client {
 		return name;
 	}
 
-	public String getFilepath() {
-		return filepath;
+	public File getFilepath() {
+		return file;
 	}	
 }

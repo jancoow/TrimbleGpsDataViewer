@@ -27,7 +27,6 @@ public class Main {
 
         
         TrimbleDataDictonary tdd = new TrimbleDataDictonary("/home/janco/Documents/tractor gegevens/T7060/AgGPS");
-        System.out.println("test");
         f = new MainFrame();
         f.setView(new DataPanelController(tdd).getView());
         

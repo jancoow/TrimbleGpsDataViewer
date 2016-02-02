@@ -7,9 +7,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 public class ListPanelPopupMenu extends JPopupMenu{
-	private JMenuItem rename ;
-	private JMenuItem merging;
-	private JMenuItem delete;
+	public JMenuItem rename ;
+	public JMenuItem merging;
+	public JMenuItem delete;
 	
 	public ListPanelPopupMenu(){
 		rename = new JMenuItem("Hernoemen");
@@ -24,5 +24,10 @@ public class ListPanelPopupMenu extends JPopupMenu{
 	public void setMergingEnabled(boolean enabled){
 		merging.setEnabled(enabled);
 	}
-
+	public void setRenamingEnabled(boolean enabled){
+		rename.setEnabled(enabled);
+	}
+	public void setDeleteEnabled(boolean enabled){
+		merging.setEnabled(enabled);
+	}	
 }

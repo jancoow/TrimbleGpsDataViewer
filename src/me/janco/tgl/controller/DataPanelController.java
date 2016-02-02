@@ -1,10 +1,11 @@
 package me.janco.tgl.controller;
 
-import java.io.BufferedReader;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import me.janco.tgl.model.TrimbleDataDictonary;
+import me.janco.tgl.model.data.Client;
 import me.janco.tgl.view.panels.DataPanel;
 
 public class DataPanelController {
@@ -24,23 +25,52 @@ public class DataPanelController {
 		return view;
 	}
 	
+	public List<Client> getClients(){
+		return ttd.getClients();
+	}
+	
 	public void setSelectedClient(int i){
+		if (i == -1) return;
 		view.setFarmListPanelData(ttd.getClients().get(i).getFarmNames());
 		view.setFieldListPanelData(new String[]{""});
 		selectedClient = i;
-		selectedFarm = -1;
-		selectedField = -1;
 	}
 
 	public void setSelectedFarm(int i){
 		if (i == -1) return;
 		view.setFieldListPanelData(ttd.getClients().get(selectedClient).getFarms().get(i).getFieldNames());
 		selectedFarm = i;
-		selectedField = -1;
 	}
 	
 	public void setSelectedField(int i){
 		selectedField = i;
 	}
 	
+	private void refreshLists(){
+		view.setClientListPanelData(ttd.getClientNames());
+		setSelectedClient(selectedClient);
+		setSelectedFarm(selectedFarm);
+		setSelectedField(selectedField);
+	}
+	
+	public boolean renameClient(String newname, int clientid){
+		boolean result = getClients().get(clientid).renameClient(newname);
+		if (result)
+			refreshLists();
+		return result;
+	}
+
+	public boolean renameFarm(String newname, int clientid, int farmid){
+		boolean result = getClients().get(clientid).getFarms().get(farmid).renameFarm(newname);
+		if (result)
+			refreshLists();
+		return result;
+	}
+	
+	public boolean renameField(String newname, int clientid, int farmid, int fieldid){
+		boolean result = getClients().get(clientid).getFarms().get(farmid).getFields().get(fieldid).renameField(newname);
+		if (result)
+			refreshLists();
+		return result;
+	}	
 }

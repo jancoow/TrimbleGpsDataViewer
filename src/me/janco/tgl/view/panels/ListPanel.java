@@ -23,6 +23,7 @@ import javax.swing.border.LineBorder;
 public class ListPanel extends JPanel{
 	
 	public JList<String> list;
+	public ListPanelPopupMenu contextmenu;
 	private DefaultListModel<String> listModel;
 	
 	public ListPanel(String name){
@@ -40,15 +41,16 @@ public class ListPanel extends JPanel{
 		this.add(new JLabel(name), BorderLayout.NORTH);
 		this.add(listScroller, BorderLayout.CENTER);
 		
-		ListPanelPopupMenu menu = new ListPanelPopupMenu();
+		contextmenu = new ListPanelPopupMenu();
 		
 		
 		list.addMouseListener(new MouseAdapter() {			
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.getButton() == e.BUTTON3){
-					menu.setMergingEnabled(list.getSelectedIndices().length > 1);
-					menu.show(e.getComponent(), e.getX(), e.getY());
+					contextmenu.setMergingEnabled(list.getSelectedIndices().length > 1);
+					contextmenu.setRenamingEnabled(list.getSelectedIndices().length == 1);
+					contextmenu.show(list, e.getX(), e.getY());
 				}
 			}
 		});

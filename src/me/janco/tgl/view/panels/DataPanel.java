@@ -2,9 +2,12 @@ package me.janco.tgl.view.panels;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -42,19 +45,42 @@ public class DataPanel extends JPanel{
 		bottombar.add(newFieldButton);	
 		add(bottombar, BorderLayout.SOUTH);
 		
-	
 		clientListPanel.list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				controller.setSelectedClient(clientListPanel.list.getSelectedIndex());
 			}
 		});
+		clientListPanel.contextmenu.rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Wijzig naam", controller.getClients().get(clientListPanel.list.getSelectedIndex()).getName());
+				if(newname != null){
+					if(!controller.renameClient(newname, clientListPanel.list.getSelectedIndex())){
+						JOptionPane.showMessageDialog(DataPanel.this.getRootPane(), "Fout bij het veranderen van de client naam: naam ongeldig");
+					}
+				}				
+			}
+		});
+		
 		farmListPanel.list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				controller.setSelectedFarm(farmListPanel.list.getSelectedIndex());
 			}
 		});
+		farmListPanel.contextmenu.rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Wijzig naam", controller.getClients().get(clientListPanel.list.getSelectedIndex()).getFarms().get(farmListPanel.list.getSelectedIndex()).getName());
+				if(newname != null){
+					if(!controller.renameFarm(newname, clientListPanel.list.getSelectedIndex(), farmListPanel.list.getSelectedIndex())){
+						JOptionPane.showMessageDialog(DataPanel.this.getRootPane(), "Fout bij het veranderen van de bedrijfs naam: naam ongeldig");
+					}
+				}				
+			}
+		});		
+		
 		fieldListPanel.list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -62,6 +88,17 @@ public class DataPanel extends JPanel{
 				controller.setSelectedField(fieldListPanel.list.getSelectedIndex());
 			}
 		});
+		fieldListPanel.contextmenu.rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Wijzig naam", controller.getClients().get(clientListPanel.list.getSelectedIndex()).getFarms().get(farmListPanel.list.getSelectedIndex()).getFields().get(fieldListPanel.list.getSelectedIndex()).getName());
+				if(newname != null){
+					if(!controller.renameField(newname, clientListPanel.list.getSelectedIndex(), farmListPanel.list.getSelectedIndex(), fieldListPanel.list.getSelectedIndex())){
+						JOptionPane.showMessageDialog(DataPanel.this.getRootPane(), "Fout bij het veranderen van de veld naam: naam ongeldig");
+					}
+				}				
+			}
+		});		
 	}
 	
 	public void setClientListPanelData(String data[]){

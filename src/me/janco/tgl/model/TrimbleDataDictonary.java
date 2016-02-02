@@ -20,7 +20,7 @@ public class TrimbleDataDictonary {
 		//Read each client directory from the root data directory
 	    for (File client : new File(path +"/Data/").listFiles()) {
 	        if (client.isDirectory()) {
-	            clients.add(new Client(client.getName(), client.getAbsolutePath()));
+	            clients.add(new Client(client.getName(), client));
 	        }
 	    }
 	}
