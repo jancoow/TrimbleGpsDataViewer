@@ -56,7 +56,7 @@ public class DataPanelController {
 	
 	public void openField(int clientid, int farmid, int fieldid){
 		Field field = ttd.getClients().get(clientid).getFarms().get(farmid).getFields().get(fieldid);
-		Main.setView(new ViewPanelController(field).getView());
+		Main.setView(new ViewPanelController(field, this).getView());
 	}
 	
 	public boolean renameClient(String newname, int clientid){

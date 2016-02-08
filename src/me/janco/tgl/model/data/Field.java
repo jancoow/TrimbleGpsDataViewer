@@ -24,7 +24,7 @@ public class Field {
 		this.name = name;
 		this.file = file;
 		swaths = new ArrayList<Swath>();
-
+		machineries = new ArrayList<Machinery>();
 		
 		//read the lat,lon file
         for (File f : file.listFiles()) {
@@ -52,14 +52,13 @@ public class Field {
 		//Read machining
 		for (File machining : file.listFiles()) {
 			if(machining.isDirectory()){
-				//machineries.add(new Machinery(machining.getName(), machining));
+				machineries.add(new Machinery(machining.getName(), machining));
 			}
         }
 	}
 	
 	public boolean renameField(String newname){
 		boolean result = file.renameTo(new File(file.getParent() + "/" + newname));
-		System.out.println(file.getParent() + "/" + newname);
 		if(result)
 			file = new File(file.getParent() + "/" + newname);
 			this.name = newname;
@@ -77,7 +76,7 @@ public class Field {
         try (DbfReader reader = new DbfReader(dbf)) {
             while ((rec = reader.read()) != null) {
                 rec.setStringCharset(Charset.forName("Cp866"));
-                swaths.add(new Swath(rec.getString("Date"), rec.getString("Version"), rec.getString("Id"), rec.getString("Name"), Float.parseFloat(rec.getString("Length")), Float.parseFloat(rec.getString("Dist1")), Float.parseFloat(rec.getString("Dist2")), rec.getString("UniqueID")));
+                swaths.add(new Swath(rec.getString("Date"), rec.getString("Version"), rec.getString("Id"), rec.getString("Name"), Float.parseFloat(rec.getString("Length")), Float.parseFloat(rec.getString("Dist1")), Float.parseFloat(rec.getString("Dist2")), rec.getString("UniqueID"), rec));
             }
         }
     }
@@ -96,6 +95,14 @@ public class Field {
     		data.add(s.getName());
     	}
     	return data.toArray(new String[data.size()]);
+    }
+    
+    public List<Machinery> getMachineries(){
+    	return machineries;
+    }
+    
+    public File getSwathsFile(){
+    	return new File(file.getAbsolutePath() + "/Swaths.shp");
     }
 
 

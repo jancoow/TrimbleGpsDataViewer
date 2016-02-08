@@ -22,11 +22,14 @@ public class Main {
 			e.printStackTrace();
 		}
         
+        System.setProperty("awt.useSystemAAFontSettings","on");
+        System.setProperty("swing.aatext", "true");
+        
         TrimbleDataDictonary tdd = new TrimbleDataDictonary("/home/janco/Documents/tractor gegevens/T7060/AgGPS");
         f = new MainFrame();
         f.setView(new DataPanelController(tdd).getView());
         
-	}
+	} 
 	
     public static void setView(JPanel view){
     	f.setView(view);
