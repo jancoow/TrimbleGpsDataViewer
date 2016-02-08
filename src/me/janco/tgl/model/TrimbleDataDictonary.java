@@ -36,4 +36,11 @@ public class TrimbleDataDictonary {
     	}
     	return data.toArray(new String[data.size()]);
 	}
+	
+	public boolean deleteClient(int clientid){
+		boolean result = clients.get(clientid).delete();
+		if (result)
+			clients.remove(clientid);
+		return result;
+	}
 }

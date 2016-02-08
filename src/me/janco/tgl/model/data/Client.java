@@ -1,8 +1,11 @@
 package me.janco.tgl.model.data;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 public class Client {
 	private ArrayList<Farm> farms;
@@ -44,6 +47,15 @@ public class Client {
     		data.add(c.getName());
     	}
     	return data.toArray(new String[data.size()]);
+	}
+	
+	public boolean delete(){
+		try {
+			FileUtils.deleteDirectory(file);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	public ArrayList<Farm> getFarms() {

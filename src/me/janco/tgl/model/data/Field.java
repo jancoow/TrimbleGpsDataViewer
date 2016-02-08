@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 import diewald_shapeFile.shapeFile.ShapeFile;
 import net.iryndin.jdbf.core.DbfRecord;
@@ -15,6 +16,7 @@ public class Field {
 	private File file;
 	
 	private ArrayList<Swath> swaths;
+	private ArrayList<Machinery> machineries;
 	private float longitude;
 	private float latitude;
 	
@@ -46,6 +48,13 @@ public class Field {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		
+		//Read machining
+		for (File machining : file.listFiles()) {
+			if(machining.isDirectory()){
+				//machineries.add(new Machinery(machining.getName(), machining));
+			}
+        }
 	}
 	
 	public boolean renameField(String newname){
@@ -72,6 +81,23 @@ public class Field {
             }
         }
     }
+    
+    public String[] getSwathsNames(){
+    	List<String> data = new ArrayList<String>();
+    	for(Swath s: swaths){
+    		data.add(s.getName());
+    	}
+    	return data.toArray(new String[data.size()]);
+    }
+    
+    public String[] getMachineryNames(){
+    	List<String> data = new ArrayList<String>();
+    	for(Machinery s: machineries){
+    		data.add(s.getName());
+    	}
+    	return data.toArray(new String[data.size()]);
+    }
+
 
 	public String getName() {
 		return name;

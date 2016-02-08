@@ -1,4 +1,4 @@
-package me.janco.tgl.view.panels;
+package me.janco.tgl.view.panels.datapanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -55,7 +55,9 @@ public class ListPanel extends JPanel{
 			}
 		});
 	}
-	
+	public int getSelected(){
+		return list.getSelectedIndex();
+	}
 	public void setData(String data[]){
 		listModel.clear();
 		for(String s:data)

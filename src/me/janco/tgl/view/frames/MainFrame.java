@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import me.janco.tgl.controller.Main;
 import me.janco.tgl.view.menubar.MenuBar;
-import me.janco.tgl.view.panels.DataPanel;
+import me.janco.tgl.view.panels.datapanel.DataPanel;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame{

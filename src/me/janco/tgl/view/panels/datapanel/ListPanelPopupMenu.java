@@ -1,4 +1,4 @@
-package me.janco.tgl.view.panels;
+package me.janco.tgl.view.panels.datapanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

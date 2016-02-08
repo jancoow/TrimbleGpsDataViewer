@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 
 import me.janco.tgl.model.TrimbleDataDictonary;
 import me.janco.tgl.model.data.Client;
-import me.janco.tgl.view.panels.DataPanel;
+import me.janco.tgl.model.data.Field;
+import me.janco.tgl.view.panels.datapanel.DataPanel;
 
 public class DataPanelController {
 	
@@ -53,6 +54,11 @@ public class DataPanelController {
 		setSelectedField(selectedField);
 	}
 	
+	public void openField(int clientid, int farmid, int fieldid){
+		Field field = ttd.getClients().get(clientid).getFarms().get(farmid).getFields().get(fieldid);
+		Main.setView(new ViewPanelController(field).getView());
+	}
+	
 	public boolean renameClient(String newname, int clientid){
 		boolean result = getClients().get(clientid).renameClient(newname);
 		if (result)
@@ -73,4 +79,11 @@ public class DataPanelController {
 			refreshLists();
 		return result;
 	}	
+	
+	public boolean deleteClient(int clientid){
+		boolean result = ttd.deleteClient(clientid);
+		if(result)
+			refreshLists();
+		return result;
+	}
 }

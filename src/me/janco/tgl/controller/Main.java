@@ -1,8 +1,6 @@
 package me.janco.tgl.controller;
 
-import java.awt.Font;
-import java.util.Enumeration;
-
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -23,8 +21,6 @@ public class Main {
 		}catch(ClassNotFoundException | InstantiationException| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-        setUIFont (new javax.swing.plaf.FontUIResource("Ubuntu", Font.PLAIN,18));
-
         
         TrimbleDataDictonary tdd = new TrimbleDataDictonary("/home/janco/Documents/tractor gegevens/T7060/AgGPS");
         f = new MainFrame();
@@ -32,18 +28,8 @@ public class Main {
         
 	}
 	
-	public static void setUIFont (javax.swing.plaf.FontUIResource f){
-		Enumeration<Object> keys = UIManager.getDefaults().keys();
-	    while (keys.hasMoreElements()) {
-	    	Object key = keys.nextElement();
-	    	Object value = UIManager.get (key);
-	    	if (value != null && value instanceof javax.swing.plaf.FontUIResource)
-	    		UIManager.put (key, f);
-	    }
-	} 
-	
-    public static void NavigateTo(){
-
+    public static void setView(JPanel view){
+    	f.setView(view);
     }
 }
 	
