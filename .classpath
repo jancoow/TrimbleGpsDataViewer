@@ -149,7 +149,6 @@
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-gdalrpftoc-1.1.13.jar"/>
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-geocore-1.1.13.jar"/>
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-imagereadmt-1.1.13.jar"/>
-	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-imagereadmt-1.1M012010.jar"/>
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-kakadu-1.1.13.jar"/>
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-mat-sas-1.1M012010.jar"/>
 	<classpathentry kind="lib" path="/home/janco/Downloads/geotools-14.2/imageio-ext-streams-1.1.13.jar"/>

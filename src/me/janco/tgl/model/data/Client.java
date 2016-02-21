@@ -9,47 +9,27 @@ import org.apache.commons.io.FileUtils;
 
 public class Client {
 	private ArrayList<Farm> farms;
-	private String name;
 	private File file;
-	
-	public Client(String name, File file){
+	private String name;
+
+	public Client(String name, File file) {
 		this.name = name;
 		this.file = file;
-        farms = new ArrayList<Farm>();
-		
-        //Read each farm directory from the client directory
-        for (File farm : file.listFiles()) {
-	        if (farm.isDirectory()) {
-	        	farms.add(new Farm(farm.getName(), farm));
-	        }
-        }
-	}
-	
-	public boolean renameClient(String newname){
-		boolean result = file.renameTo(new File(file.getParent() + "/" + newname));
-		if(result){
-			file = new File(file.getParent() + "/" + newname);
-			this.name = newname;
-			for(Farm f:farms){
-				f.changeParentDir(file.getAbsolutePath());
+		farms = new ArrayList<Farm>();
+
+		// Read each farm directory from the client directory
+		for (File farm : file.listFiles()) {
+			if (farm.isDirectory()) {
+				farms.add(new Farm(farm.getName(), farm));
 			}
 		}
-		return result;
 	}
-	
-	public void addFarm(Farm farm){
+
+	public void addFarm(Farm farm) {
 		farms.add(farm);
 	}
-	
-	public String[] getFarmNames(){
-    	List<String> data = new ArrayList<String>();
-    	for(Farm c: farms){
-    		data.add(c.getName());
-    	}
-    	return data.toArray(new String[data.size()]);
-	}
-	
-	public boolean delete(){
+
+	public boolean delete() {
 		try {
 			FileUtils.deleteDirectory(file);
 			return true;
@@ -58,15 +38,35 @@ public class Client {
 		}
 	}
 
+	public String[] getFarmNames() {
+		List<String> data = new ArrayList<String>();
+		for (Farm c : farms) {
+			data.add(c.getName());
+		}
+		return data.toArray(new String[data.size()]);
+	}
+
 	public ArrayList<Farm> getFarms() {
 		return farms;
+	}
+
+	public File getFilepath() {
+		return file;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public File getFilepath() {
-		return file;
-	}	
+	public boolean renameClient(String newname) {
+		boolean result = file.renameTo(new File(file.getParent() + "/" + newname));
+		if (result) {
+			file = new File(file.getParent() + "/" + newname);
+			this.name = newname;
+			for (Farm f : farms) {
+				f.changeParentDir(file.getAbsolutePath());
+			}
+		}
+		return result;
+	}
 }

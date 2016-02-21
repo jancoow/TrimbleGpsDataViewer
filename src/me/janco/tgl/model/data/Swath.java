@@ -1,17 +1,19 @@
 package me.janco.tgl.model.data;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import org.geotools.map.FeatureLayer;
 
 public class Swath {
-	private String time, version, name, uniqueid;
 	private Date date;
-	private BigDecimal id, length, dist1, dist2;
-	
-	public Swath(Date date, String time, String version, BigDecimal id, String name, BigDecimal length, BigDecimal dist1, BigDecimal dist2, String uniqueid){
+	private FeatureLayer featurelayer;
+	private double id, length, dist1, dist2;
+	private String time, version, name, uniqueid;
+
+	public Swath(Date date, String time, String version, double id, String name, double length, double dist1,
+			double dist2, String uniqueid, FeatureLayer featurelayer) {
 		this.date = date;
 		this.time = time;
 		this.version = version;
@@ -21,9 +23,14 @@ public class Swath {
 		this.dist1 = dist1;
 		this.dist2 = dist2;
 		this.uniqueid = uniqueid;
+		this.featurelayer = featurelayer;
 	}
-	
-	public Map<String, Object> getMap(){
+
+	public FeatureLayer getFeaturelayer() {
+		return featurelayer;
+	}
+
+	public Map<String, Object> getMap() {
 		HashMap<String, Object> m = new HashMap<String, Object>();
 		m.put("Date", date);
 		m.put("Time", time);
@@ -36,11 +43,17 @@ public class Swath {
 		m.put("UniqueID", uniqueid);
 		return m;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	public void setName(String newname){
+
+	public String getUniqueid() {
+		return uniqueid;
+	}
+
+	public void setName(String newname) {
 		this.name = newname;
 	}
+
 }

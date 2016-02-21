@@ -7,6 +7,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -27,34 +28,21 @@ import org.geotools.swing.action.ZoomInAction;
 import org.geotools.swing.action.ZoomOutAction;
 import org.opengis.feature.simple.SimpleFeature;
 
+import me.janco.tgl.model.data.Swath;
+
+@SuppressWarnings("serial")
 public class MapViewPanel extends JPanel {
 
 	private MapContent map;
 	private JMapPane mapPane;
-	
-	public MapViewPanel(File f){
+
+	public MapViewPanel() {
 		this.setLayout(new BorderLayout());
 		this.setBorder(new EmptyBorder(0, 15, 0, 0));
 		map = new MapContent();
-		
-		try {
-			if(f == null || !f.exists())
-				throw new IOException("File doesn't exist");
-	        SimpleFeatureSource featureSource = FileDataStoreFinder.getDataStore(f).getFeatureSource();
-	        Style style = SLD.createSimpleStyle(featureSource.getSchema(), Color.red); 
-	        SimpleFeature features[] = (SimpleFeature[])featureSource.getFeatures().toArray();
-	        for(SimpleFeature s : features){
-	        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
-	        	lineCollection.add(s);
-	        	map.addLayer(new FeatureLayer(lineCollection, style, (String) s.getAttribute("Name")));
-	        }	        
-		} catch (IOException e) {
-			System.out.println("Couldn't load swaths file");
-		}
-        
 		mapPane = new JMapPane(map);
 		this.add(mapPane, BorderLayout.CENTER);
-		
+
 		JPanel buttons = new JPanel();
 		JButton zoomInButton = new JButton(new ZoomInAction(mapPane));
 		JButton zoomOutButton = new JButton(new ZoomOutAction(mapPane));
@@ -63,71 +51,77 @@ public class MapViewPanel extends JPanel {
 		buttons.add(zoomOutButton);
 		buttons.add(zoomInButton);
 		this.add(buttons, BorderLayout.NORTH);
-		
-		mapPane.setCursorTool(new org.geotools.swing.tool.PanTool() );
+
+		mapPane.setCursorTool(new org.geotools.swing.tool.PanTool());
 		mapPane.addMouseWheelListener(new MouseWheelListener() {
-			
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-			   int clicks = e.getWheelRotation();
-			   int sign = (clicks < 0 ? -1 : 1);
+				int clicks = e.getWheelRotation();
+				int sign = (clicks < 0 ? -1 : 1);
 
-			   ReferencedEnvelope env = mapPane.getDisplayArea();
-			   double width = env.getWidth();
-			   double delta = width * 0.1 * sign;
+				ReferencedEnvelope env = mapPane.getDisplayArea();
+				double width = env.getWidth();
+				double delta = width * 0.1 * sign;
 
-			   env.expandBy(delta);
-			   mapPane.repaint();
+				env.expandBy(delta);
+				mapPane.repaint();
 			}
 		});
 	}
-	
 
-	
-	public void setMachinery(File f){
-		if(map.layers().size() > 1){
+	public void setMachinery(File f) {
+		if (map.layers().size() > 1) {
 			map.removeLayer(map.layers().get(1));
 		}
-        SimpleFeatureSource featureSource;
+		SimpleFeatureSource featureSource;
 		try {
-			if(f == null || !f.exists())
+			if (f == null || !f.exists())
 				throw new IOException("File doesn't exist");
 			featureSource = FileDataStoreFinder.getDataStore(f).getFeatureSource();
-	        Style style = SLD.createSimpleStyle(featureSource.getSchema()); 
-	        map.addLayer(new FeatureLayer(featureSource, style));	
+			Style style = SLD.createSimpleStyle(featureSource.getSchema());
+			map.addLayer(new FeatureLayer(featureSource, style));
 		} catch (IOException e) {
 			System.out.println("Couldn't load machinery");
 		}
-		mapPane.repaint(10);
+		mapPane.repaint();
 	}
 
-
+	public void setMapData(List<Swath> swaths) {
+		Iterator<Layer> i = map.layers().iterator();
+		while (i.hasNext()) {
+			map.removeLayer(i.next());
+		}
+		for (Swath s : swaths) {
+			if (s.getFeaturelayer() != null && map != null)
+				map.addLayer(s.getFeaturelayer());
+		}
+	}
 
 	public void setSelectedSwath(String selectedValue) {
 		Iterator<Layer> it = map.layers().iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			Layer l = it.next();
-			if(l.getTitle().equals(selectedValue)){
+			if (l.getTitle() != null && l.getTitle().equals(selectedValue)) {
 				try {
-					Style style = SLD.createLineStyle(Color.green, 1); 
-		        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
-		        	SimpleFeature sf;
-					sf = (SimpleFeature)l.getFeatureSource().getFeatures().toArray()[0];
-		        	lineCollection.add(sf);
-		        	map.removeLayer(l);
-		        	map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
+					Style style = SLD.createLineStyle(Color.green, 1);
+					DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+					SimpleFeature sf;
+					sf = (SimpleFeature) l.getFeatureSource().getFeatures().toArray()[0];
+					lineCollection.add(sf);
+					map.removeLayer(l);
+					map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}else{
+			} else {
 				try {
-					Style style = SLD.createLineStyle(Color.red, 1); 
-		        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
-		        	SimpleFeature sf;
-					sf = (SimpleFeature)l.getFeatureSource().getFeatures().toArray()[0];
-		        	lineCollection.add(sf);
-		        	map.removeLayer(l);
-		        	map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
+					Style style = SLD.createLineStyle(Color.red, 1);
+					DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+					SimpleFeature sf;
+					sf = (SimpleFeature) l.getFeatureSource().getFeatures().toArray()[0];
+					lineCollection.add(sf);
+					map.removeLayer(l);
+					map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -135,6 +129,4 @@ public class MapViewPanel extends JPanel {
 		}
 		mapPane.repaint();
 	}
-	
-
 }

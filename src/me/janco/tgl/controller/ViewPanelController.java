@@ -8,48 +8,57 @@ import me.janco.tgl.model.data.Field;
 import me.janco.tgl.view.panels.viewpanel.ViewPanel;
 
 public class ViewPanelController {
-	private ViewPanel view;
-	private Field field;
 	private DataPanelController dpc;
+	private Field field;
+	private ViewPanel view;
 
-	public ViewPanelController(Field field, DataPanelController dpc){
-    	this.field = field;
-    	this.dpc = dpc;
+	public ViewPanelController(Field field, DataPanelController dpc) {
+		this.field = field;
+		this.dpc = dpc;
 
-    	view = new ViewPanel(this);
+		view = new ViewPanel(this);
 
-    	view.swaths.setData(field.getSwathsNames());
-    	view.machinery.setData(field.getMachineryNames());    	
+		setData();
 	}
-	
-	public JPanel getView(){
-		return view;
+
+	public void deleteSwath(int selected) {
+		try {
+			getField().deleteSwath(selected);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		setData();
 	}
-	
-	public void switchBack(){
-		Main.setView(dpc.getView());
-	}
-	
-	public File getSwathShp(){
-		return field.getSwathsFile();
-	}
-	
-	public Field getField(){
+
+	public Field getField() {
 		return field;
 	}
-	
-	public void setSelectedMachinery(int index){
+
+	public JPanel getView() {
+		return view;
+	}
+
+	public void renameSwath(String newname, int selected) {
+		try {
+			getField().renameSwath(newname, selected);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		setData();
+	}
+
+	public void setData() {
+		view.swaths.setData(field.getSwathsNames());
+		view.machinery.setData(field.getMachineryNames());
+		view.mapViewPanel.setMapData(field.getSwaths());
+	}
+
+	public void setSelectedMachinery(int index) {
 		File m = field.getMachineries().get(index).getCoverageFile();
 		view.mapViewPanel.setMachinery(m);
 	}
 
-	public void renameSwath(String newname, int selected) {
-		getField().renameSwath(newname, selected);
-    	view.swaths.setData(field.getSwathsNames());
-	}
-	
-	public void deleteSwath(int selected){
-		getField().deleteSwath(selected);
-    	view.swaths.setData(field.getSwathsNames());
+	public void switchBack() {
+		Main.setView(dpc.getView());
 	}
 }

@@ -11,13 +11,13 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
-public class MenuBar extends JMenuBar{
+public class MenuBar extends JMenuBar {
 
-	public MenuBar(){
+	public MenuBar() {
 		initialize();
 	}
 
-	private void initialize(){
+	private void initialize() {
 		setLayout(new FlowLayout(80));
 		JMenu fileMenu = new JMenu("Bestand");
 		JMenu editMenu = new JMenu("Edit");
@@ -32,7 +32,7 @@ public class MenuBar extends JMenuBar{
 		JMenuItem exitAction = new JMenuItem("Afsluiten");
 		JMenuItem uploadAction = new JMenuItem("Syncroniseren met database");
 
-		//view 
+		// view
 		JMenuItem editorView = new JMenuItem("Editor");
 		JMenuItem agendaView = new JMenuItem("Agenda");
 		JMenuItem simulatorView = new JMenuItem("Simulator");
@@ -40,31 +40,34 @@ public class MenuBar extends JMenuBar{
 
 		openAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		exitAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-		uploadAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U,ActionEvent.CTRL_MASK));
+		uploadAction.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.CTRL_MASK));
 
 		fileMenu.add(openAction);
 		openAction.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
 			}
 		});
 		fileMenu.add(uploadAction);
 		uploadAction.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
 			}
 		});
-		
+
 		fileMenu.addSeparator();
-		
+
 		fileMenu.add(exitAction);
 		exitAction.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
 
-		//view
+		// view
 		viewMenu.add(editorView);
 		editorView.addActionListener(new ActionListener() {
 			@Override
