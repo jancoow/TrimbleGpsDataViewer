@@ -8,12 +8,14 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import me.janco.tgl.controller.ViewPanelController;
+import me.janco.tgl.view.panels.datapanel.DataPanel;
 import me.janco.tgl.view.panels.datapanel.ListPanel;
 
 public class ViewPanel extends JPanel {
@@ -34,6 +36,28 @@ public class ViewPanel extends JPanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				vpc.setSelectedMachinery(machinery.list.getSelectedIndex());
+			}
+		});
+		
+		swaths.list.addListSelectionListener(new ListSelectionListener() {	
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				mapViewPanel.setSelectedSwath(swaths.list.getSelectedValue());				
+			}
+		});
+		swaths.contextmenu.rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Wijzig naam", vpc.getField().getSwaths().get(swaths.getSelected()).getName());
+				if(newname != null){
+					vpc.renameSwath(newname, swaths.getSelected());
+				}				
+			}
+		});
+		swaths.contextmenu.delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				vpc.deleteSwath(swaths.getSelected());
 			}
 		});
 		

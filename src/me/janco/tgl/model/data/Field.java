@@ -2,24 +2,29 @@ package me.janco.tgl.model.data;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import diewald_shapeFile.shapeFile.ShapeFile;
+import net.iryndin.jdbf.core.DbfMetadata;
 import net.iryndin.jdbf.core.DbfRecord;
 import net.iryndin.jdbf.reader.DbfReader;
+import net.iryndin.jdbf.writer.DbfWriter;
 
 public class Field {
 	private String name;
 	private File file;
 	
-	private ArrayList<Swath> swaths;
 	private ArrayList<Machinery> machineries;
 	private float longitude;
 	private float latitude;
-	
+		
+	private ArrayList<Swath> swaths;
+	private DbfMetadata dbfMetadata;
+
 	public Field(String name, File file){
 		this.name = name;
 		this.file = file;
@@ -72,13 +77,33 @@ public class Field {
 	
     private void readSwathsDBF() throws Exception {
         InputStream dbf = new FileInputStream(file.getAbsolutePath() + "/Swaths.dbf");
-        DbfRecord rec;
+        DbfRecord rec;       
         try (DbfReader reader = new DbfReader(dbf)) {
-            while ((rec = reader.read()) != null) {
+        	dbfMetadata = reader.getMetadata();
+            while ((rec = reader.read()) != null) {            	
                 rec.setStringCharset(Charset.forName("Cp866"));
-                swaths.add(new Swath(rec.getString("Date"), rec.getString("Version"), rec.getString("Id"), rec.getString("Name"), Float.parseFloat(rec.getString("Length")), Float.parseFloat(rec.getString("Dist1")), Float.parseFloat(rec.getString("Dist2")), rec.getString("UniqueID"), rec));
+                swaths.add(new Swath(rec.getDate("Date"), rec.getString("Time"), rec.getString("Version"), rec.getBigDecimal("Id"), rec.getString("Name"), rec.getBigDecimal("Length"), rec.getBigDecimal("Dist1"), rec.getBigDecimal("Dist2"), rec.getString("UniqueID")));
             }
+            reader.close();
+            dbf.close();
         }
+    }
+    
+    private void writeFile(){
+    	FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(file.getAbsolutePath() + "/Swaths.dbf");
+	        DbfWriter dbfWriter = new DbfWriter(dbfMetadata, fos);
+            final String encoding = "CP866";
+            dbfWriter.setStringCharset(encoding);
+            for(Swath s: swaths){
+                dbfWriter.write(s.getMap());
+            }
+            dbfWriter.close();
+            fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     public String[] getSwathsNames(){
@@ -88,6 +113,19 @@ public class Field {
     	}
     	return data.toArray(new String[data.size()]);
     }
+    public ArrayList<Swath> getSwaths(){
+    	return swaths;
+    }
+    
+    public void renameSwath(String newname, int id){
+    	swaths.get(id).setName(newname);
+    	writeFile();
+    }
+
+	public void deleteSwath(int selected) {
+		swaths.remove(selected);
+		writeFile();
+	}
     
     public String[] getMachineryNames(){
     	List<String> data = new ArrayList<String>();
@@ -117,6 +155,7 @@ public class Field {
 	public float getLatitude() {
 		return latitude;
 	}
+
     
     
 }

@@ -42,4 +42,14 @@ public class ViewPanelController {
 		File m = field.getMachineries().get(index).getCoverageFile();
 		view.mapViewPanel.setMachinery(m);
 	}
+
+	public void renameSwath(String newname, int selected) {
+		getField().renameSwath(newname, selected);
+    	view.swaths.setData(field.getSwathsNames());
+	}
+	
+	public void deleteSwath(int selected){
+		getField().deleteSwath(selected);
+    	view.swaths.setData(field.getSwathsNames());
+	}
 }

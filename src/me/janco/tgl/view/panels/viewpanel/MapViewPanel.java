@@ -2,12 +2,11 @@ package me.janco.tgl.view.panels.viewpanel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,8 +14,10 @@ import javax.swing.border.EmptyBorder;
 
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
+import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
@@ -24,6 +25,7 @@ import org.geotools.swing.JMapPane;
 import org.geotools.swing.action.PanAction;
 import org.geotools.swing.action.ZoomInAction;
 import org.geotools.swing.action.ZoomOutAction;
+import org.opengis.feature.simple.SimpleFeature;
 
 public class MapViewPanel extends JPanel {
 
@@ -35,13 +37,17 @@ public class MapViewPanel extends JPanel {
 		this.setBorder(new EmptyBorder(0, 15, 0, 0));
 		map = new MapContent();
 		
-		
 		try {
 			if(f == null || !f.exists())
 				throw new IOException("File doesn't exist");
 	        SimpleFeatureSource featureSource = FileDataStoreFinder.getDataStore(f).getFeatureSource();
-	        Style style = SLD.createSimpleStyle(featureSource.getSchema(), Color.red);    
-	        map.addLayer(new FeatureLayer(featureSource, style));
+	        Style style = SLD.createSimpleStyle(featureSource.getSchema(), Color.red); 
+	        SimpleFeature features[] = (SimpleFeature[])featureSource.getFeatures().toArray();
+	        for(SimpleFeature s : features){
+	        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+	        	lineCollection.add(s);
+	        	map.addLayer(new FeatureLayer(lineCollection, style, (String) s.getAttribute("Name")));
+	        }	        
 		} catch (IOException e) {
 			System.out.println("Couldn't load swaths file");
 		}
@@ -64,7 +70,6 @@ public class MapViewPanel extends JPanel {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 			   int clicks = e.getWheelRotation();
-			   // -ve means wheel moved up, +ve means down
 			   int sign = (clicks < 0 ? -1 : 1);
 
 			   ReferencedEnvelope env = mapPane.getDisplayArea();
@@ -72,7 +77,6 @@ public class MapViewPanel extends JPanel {
 			   double delta = width * 0.1 * sign;
 
 			   env.expandBy(delta);
-			   mapPane.setDisplayArea(env);
 			   mapPane.repaint();
 			}
 		});
@@ -95,6 +99,41 @@ public class MapViewPanel extends JPanel {
 			System.out.println("Couldn't load machinery");
 		}
 		mapPane.repaint(10);
+	}
+
+
+
+	public void setSelectedSwath(String selectedValue) {
+		Iterator<Layer> it = map.layers().iterator();
+		while(it.hasNext()){
+			Layer l = it.next();
+			if(l.getTitle().equals(selectedValue)){
+				try {
+					Style style = SLD.createLineStyle(Color.green, 1); 
+		        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+		        	SimpleFeature sf;
+					sf = (SimpleFeature)l.getFeatureSource().getFeatures().toArray()[0];
+		        	lineCollection.add(sf);
+		        	map.removeLayer(l);
+		        	map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else{
+				try {
+					Style style = SLD.createLineStyle(Color.red, 1); 
+		        	DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+		        	SimpleFeature sf;
+					sf = (SimpleFeature)l.getFeatureSource().getFeatures().toArray()[0];
+		        	lineCollection.add(sf);
+		        	map.removeLayer(l);
+		        	map.addLayer(new FeatureLayer(lineCollection, style, (String) sf.getAttribute("Name")));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		mapPane.repaint();
 	}
 	
 
