@@ -59,6 +59,7 @@ public class ViewPanelController {
 	}
 
 	public void switchBack() {
+		view.mapViewPanel.map.dispose();
 		Main.setView(dpc.getView());
 	}
 }

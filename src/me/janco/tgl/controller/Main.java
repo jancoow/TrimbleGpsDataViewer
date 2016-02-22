@@ -1,5 +1,7 @@
 package me.janco.tgl.controller;
 
+import java.io.File;
+
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -8,7 +10,7 @@ import me.janco.tgl.model.TrimbleDataDictonary;
 import me.janco.tgl.view.frames.MainFrame;
 
 public class Main {
-	static private MainFrame f;
+	private static MainFrame f;
 
 	public static void main(String[] args) {
 		// sets the systems look and feels
@@ -25,14 +27,26 @@ public class Main {
 
 		System.setProperty("awt.useSystemAAFontSettings", "on");
 		System.setProperty("swing.aatext", "true");
+		System.setProperty("apple.awt.fileDialogForDirectories", "true");
 
-		TrimbleDataDictonary tdd = new TrimbleDataDictonary("/home/janco/Documents/tractor gegevens/T7060/AgGPS");
 		f = new MainFrame();
-		f.setView(new DataPanelController(tdd).getView());
-
+		f.setView(new DataPanelController().getView());
 	}
 
 	public static void setView(JPanel view) {
 		f.setView(view);
+	}
+	private static void setTitleBar(String title){
+		f.setTitle(title + " - Trimble GPS Loader");
+	}
+	public static boolean setData(File file){
+		if(file.isDirectory() && file.getName().equals("AgGPS")){
+			TrimbleDataDictonary tdd = new TrimbleDataDictonary(file.getAbsolutePath());
+			f.setView(new DataPanelController(tdd).getView());
+			setTitleBar(file.getPath());
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

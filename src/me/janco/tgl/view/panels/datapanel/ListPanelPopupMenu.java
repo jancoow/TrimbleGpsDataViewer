@@ -3,6 +3,7 @@ package me.janco.tgl.view.panels.datapanel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+@SuppressWarnings("serial")
 public class ListPanelPopupMenu extends JPopupMenu {
 	public JMenuItem delete;
 	public JMenuItem merging;

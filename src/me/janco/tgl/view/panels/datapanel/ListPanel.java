@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -54,7 +55,7 @@ public class ListPanel extends JPanel {
 		return list.getSelectedIndex();
 	}
 
-	public void setData(String data[]) {
+	public void setData(List<String> data) {
 		listModel.clear();
 		for (String s : data)
 			listModel.addElement(s);

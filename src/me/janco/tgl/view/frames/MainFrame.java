@@ -11,7 +11,7 @@ import me.janco.tgl.view.menubar.MenuBar;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
-
+	
 	public MainFrame() {
 		this.setResizable(true);
 		this.setBounds(100, 100, 1440, 900);
@@ -28,4 +28,6 @@ public class MainFrame extends JFrame {
 		this.setContentPane(jpanel);
 		this.revalidate();
 	}
+	
+
 }

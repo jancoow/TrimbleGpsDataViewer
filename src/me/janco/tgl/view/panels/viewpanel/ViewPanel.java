@@ -17,13 +17,12 @@ import javax.swing.event.ListSelectionListener;
 import me.janco.tgl.controller.ViewPanelController;
 import me.janco.tgl.view.panels.datapanel.ListPanel;
 
+@SuppressWarnings("serial")
 public class ViewPanel extends JPanel {
 	public MapViewPanel mapViewPanel;
 	public ListPanel swaths, machinery;
-	private ViewPanelController vpc;
 
 	public ViewPanel(ViewPanelController vpc) {
-		this.vpc = vpc;
 		setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 		setLayout(new BorderLayout());
 

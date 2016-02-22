@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,12 +19,10 @@ import me.janco.tgl.controller.DataPanelController;
 @SuppressWarnings("serial")
 public class DataPanel extends JPanel {
 	private ListPanel clientListPanel, farmListPanel, fieldListPanel;
-	private DataPanelController controller;
 
 	public DataPanel(DataPanelController controller) {
 		setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 		setLayout(new BorderLayout());
-		this.controller = controller;
 
 		// Grid where all the listviews are placed
 		JPanel listviewgrid = new JPanel(new GridLayout(1, 3, 50, 50));
@@ -69,6 +68,15 @@ public class DataPanel extends JPanel {
 						JOptionPane.showMessageDialog(DataPanel.this.getRootPane(),
 								"Fout bij het veranderen van de client naam: naam ongeldig");
 					}
+				}
+			}
+		});
+		clientListPanel.contextmenu.merging.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Nieuwe naam");
+				if (newname != null) {
+					controller.mergeClient(clientListPanel.list.getSelectedValuesList(), newname);
 				}
 			}
 		});
@@ -124,15 +132,15 @@ public class DataPanel extends JPanel {
 		});
 	}
 
-	public void setClientListPanelData(String data[]) {
+	public void setClientListPanelData(List<String> data) {
 		clientListPanel.setData(data);
 	}
 
-	public void setFarmListPanelData(String data[]) {
+	public void setFarmListPanelData(List<String> data) {
 		farmListPanel.setData(data);
 	}
 
-	public void setFieldListPanelData(String data[]) {
+	public void setFieldListPanelData(List<String> data) {
 		fieldListPanel.setData(data);
 	}
 

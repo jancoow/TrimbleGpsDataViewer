@@ -24,7 +24,6 @@ import org.opengis.filter.FilterFactory;
 public class Field {
 	private File file;
 	private float latitude;
-
 	private float longitude;
 	private ArrayList<Machinery> machineries;
 	private String name;
@@ -97,12 +96,12 @@ public class Field {
 		return machineries;
 	}
 
-	public String[] getMachineryNames() {
+	public List<String> getMachineryNames() {
 		List<String> data = new ArrayList<String>();
 		for (Machinery s : machineries) {
 			data.add(s.getName());
 		}
-		return data.toArray(new String[data.size()]);
+		return data;
 	}
 
 	public String getName() {
@@ -117,12 +116,12 @@ public class Field {
 		return new File(file.getAbsolutePath() + "/Swaths.shp");
 	}
 
-	public String[] getSwathsNames() {
+	public List<String> getSwathsNames() {
 		List<String> data = new ArrayList<String>();
 		for (Swath s : swaths) {
 			data.add(s.getName());
 		}
-		return data.toArray(new String[data.size()]);
+		return data;
 	}
 
 	private void readSwathsDBF() throws Exception {

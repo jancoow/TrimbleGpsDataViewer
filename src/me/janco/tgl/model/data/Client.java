@@ -37,13 +37,21 @@ public class Client {
 			return false;
 		}
 	}
+	
+	public boolean deleteFarm(Farm f){
+		if(f.delete()){
+			this.farms.remove(f);
+			return true;
+		}
+		return false;
+	}
 
-	public String[] getFarmNames() {
+	public List<String> getFarmNames() {
 		List<String> data = new ArrayList<String>();
 		for (Farm c : farms) {
 			data.add(c.getName());
 		}
-		return data.toArray(new String[data.size()]);
+		return data;
 	}
 
 	public ArrayList<Farm> getFarms() {

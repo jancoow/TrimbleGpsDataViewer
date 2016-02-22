@@ -33,8 +33,8 @@ import me.janco.tgl.model.data.Swath;
 @SuppressWarnings("serial")
 public class MapViewPanel extends JPanel {
 
-	private MapContent map;
-	private JMapPane mapPane;
+	public MapContent map;
+	public JMapPane mapPane;
 
 	public MapViewPanel() {
 		this.setLayout(new BorderLayout());

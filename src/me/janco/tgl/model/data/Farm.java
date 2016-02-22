@@ -1,8 +1,11 @@
 package me.janco.tgl.model.data;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 public class Farm {
 	private ArrayList<Field> fields;
@@ -33,12 +36,12 @@ public class Farm {
 		}
 	}
 
-	public String[] getFieldNames() {
+	public List<String> getFieldNames() {
 		List<String> data = new ArrayList<String>();
 		for (Field c : fields) {
 			data.add(c.getName());
 		}
-		return data.toArray(new String[data.size()]);
+		return data;
 	}
 
 	public ArrayList<Field> getFields() {
@@ -59,5 +62,14 @@ public class Farm {
 			this.name = newname;
 		changeParentDir(file.getParent());
 		return result;
+	}
+
+	public boolean delete() {
+		try {
+			FileUtils.deleteDirectory(file);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 	}
 }

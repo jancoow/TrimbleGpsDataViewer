@@ -1,5 +1,7 @@
 package me.janco.tgl.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -20,6 +22,10 @@ public class DataPanelController {
 		this.ttd = ttd;
 
 		view.setClientListPanelData(ttd.getClientNames());
+	}
+	
+	public DataPanelController(){
+		view = new DataPanel(this);
 	}
 
 	public boolean deleteClient(int clientid) {
@@ -75,7 +81,7 @@ public class DataPanelController {
 		if (i == -1)
 			return;
 		view.setFarmListPanelData(ttd.getClients().get(i).getFarmNames());
-		view.setFieldListPanelData(new String[] { "" });
+		view.setFieldListPanelData(new ArrayList<String>());
 		selectedClient = i;
 	}
 
@@ -88,5 +94,15 @@ public class DataPanelController {
 
 	public void setSelectedField(int i) {
 		selectedField = i;
+	}
+
+	public void mergeClient(List<String> selectedValuesList, String newname) {
+		List<Client> selectedClients = new ArrayList<Client>();
+		for(String s:selectedValuesList){
+			selectedClients.add(ttd.getClientByName(s));
+		}
+		if(!ttd.mergeClients(selectedClients, newname))
+			System.out.println("Er is ergens wat fout gegaan. Waarschijnlijk dubbele bedrijfsnaam.");
+		refreshLists();
 	}
 }
