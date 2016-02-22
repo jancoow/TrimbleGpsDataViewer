@@ -45,6 +45,10 @@ public class Client {
 		}
 		return false;
 	}
+	
+	public boolean deleteFarm(int farmid){
+		return deleteFarm(farms.get(farmid));
+	}
 
 	public List<String> getFarmNames() {
 		List<String> data = new ArrayList<String>();

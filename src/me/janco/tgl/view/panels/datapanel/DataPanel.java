@@ -106,7 +106,13 @@ public class DataPanel extends JPanel {
 				}
 			}
 		});
-
+		clientListPanel.contextmenu.delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controller.deleteFarm(clientListPanel.getSelected(), farmListPanel.getSelected());
+			}
+		});
+		
 		fieldListPanel.list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {

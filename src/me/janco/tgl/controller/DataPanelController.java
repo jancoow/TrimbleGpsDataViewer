@@ -34,6 +34,13 @@ public class DataPanelController {
 			refreshLists();
 		return result;
 	}
+	
+	public boolean deleteFarm(int clientid, int farmid){
+		boolean result = ttd.getClients().get(clientid).deleteFarm(farmid);
+		if (result)
+			refreshLists();
+		return result;	
+	}
 
 	public List<Client> getClients() {
 		return ttd.getClients();
