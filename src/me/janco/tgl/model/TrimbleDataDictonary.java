@@ -24,7 +24,7 @@ public class TrimbleDataDictonary {
 		return deleteClient(clients.get(clientid));
 	}
 	
-	public boolean deleteClient(Client client){
+	private boolean deleteClient(Client client){
 		boolean result = client.delete();
 		if (result)
 			clients.remove(client);

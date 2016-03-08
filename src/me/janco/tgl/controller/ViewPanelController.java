@@ -47,7 +47,7 @@ public class ViewPanelController {
 		setData();
 	}
 
-	public void setData() {
+	private void setData() {
 		view.swaths.setData(field.getSwathsNames());
 		view.machinery.setData(field.getMachineryNames());
 		view.mapViewPanel.setMapData(field.getSwaths());

@@ -106,10 +106,19 @@ public class DataPanel extends JPanel {
 				}
 			}
 		});
-		clientListPanel.contextmenu.delete.addActionListener(new ActionListener() {
+		farmListPanel.contextmenu.delete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controller.deleteFarm(clientListPanel.getSelected(), farmListPanel.getSelected());
+			}
+		});
+		farmListPanel.contextmenu.merging.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String newname = JOptionPane.showInputDialog("Nieuwe naam");
+				if (newname != null) {
+					controller.mergeFarm(clientListPanel.getSelected(), farmListPanel.list.getSelectedValuesList(), newname);
+				}
 			}
 		});
 		
@@ -136,6 +145,12 @@ public class DataPanel extends JPanel {
 				}
 			}
 		});
+		fieldListPanel.contextmenu.delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				controller.deleteField(clientListPanel.getSelected(), farmListPanel.getSelected(), fieldListPanel.getSelected());
+			}
+		});		
 	}
 
 	public void setClientListPanelData(List<String> data) {

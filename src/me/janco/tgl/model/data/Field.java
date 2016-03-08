@@ -2,10 +2,12 @@ package me.janco.tgl.model.data;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
@@ -124,7 +126,7 @@ public class Field {
 		return data;
 	}
 
-	private void readSwathsDBF() throws Exception {
+	public void readSwathsDBF() throws Exception {
 		swaths.clear();
 		FileDataStore filedatastore = FileDataStoreFinder.getDataStore(getSwathsFile());
 		Style style = SLD.createSimpleStyle(filedatastore.getFeatureSource().getSchema(), Color.red);
@@ -170,5 +172,18 @@ public class Field {
 		transaction.close();
 		filedatastore.dispose();
 		readSwathsDBF();
+	}
+	
+	public boolean delete() {
+		try {
+			FileUtils.deleteDirectory(file);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	public File getFilepath() {
+		return file;
 	}
 }

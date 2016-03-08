@@ -25,10 +25,6 @@ public class Farm {
 		}
 	}
 
-	public void addField(Field field) {
-		fields.add(field);
-	}
-
 	public void changeParentDir(String newpath) {
 		file = new File(newpath + "/" + name);
 		for (Field f : fields) {
@@ -71,5 +67,17 @@ public class Farm {
 		} catch (IOException e) {
 			return false;
 		}
+	}
+
+	private boolean deleteField(Field f){
+		if(f.delete()){
+			this.fields.remove(f);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteField(int fieldid){
+		return deleteField(fields.get(fieldid));
 	}
 }
