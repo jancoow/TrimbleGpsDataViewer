@@ -9,6 +9,8 @@ import java.util.List;
 
 import me.janco.tgl.model.data.Client;
 import me.janco.tgl.model.data.Farm;
+import me.janco.tgl.model.data.Field;
+import me.janco.tgl.model.data.Swath;
 
 public class TrimbleDataDictonary {
 	private ArrayList<Client> clients;
@@ -18,6 +20,7 @@ public class TrimbleDataDictonary {
 		this.path = path;
 		clients = new ArrayList<Client>();
 		readClientData();
+		MySqlExport();
 	}
 
 	public boolean deleteClient(int clientid) {
@@ -85,6 +88,25 @@ public class TrimbleDataDictonary {
 			if (client.isDirectory()) {
 				clients.add(new Client(client.getName(), client));
 			}
+		}
+	}
+
+	public void MySqlExport(){
+		for (Client c:clients){
+			System.out.println("INSERT INTO Client(Name) VALUES ('" + c.getName() + "');");
+			for(Farm fa: c.getFarms()){
+				System.out.println("INSERT INTO Farm(Name, ClientName) VALUES ('" + fa.getName() + "','" + c.getName() + "');");
+				for(Field fi: fa.getFields()){
+					System.out.println("INSERT INTO Field(Name, Latitude, Longitude, ClientName, FarmName) VALUES ('" + fi.getName() + "','" + fi.getLongitude() + "','" + fi.getLatitude() + "','" + c.getName() + "','" + fa.getName() + "');");
+					for(Swath s:fi.getSwaths()){
+						System.out.println("INSERT INTO Swath(SwathId, Name, Length, Dist1, Dist2, ClientName, FarmName, FieldName) VALUES ('" + s.getUniqueid() + "', '" + s.getName() + "','" + s.getLength() + "','" + s.getDist1() + "','" + s.getDist2() + "','" + c.getName() + "','" + fa.getName() + "','" + fi.getName() + "');");
+						for(int i = 0; i < s.getCoordinates().size(); i++){
+							System.out.println("INSERT INTO SwathCoordinate(Latitude, Longitude, Sequence, SwathId, ClientName, FarmName, FieldName) VALUES ('" + s.getCoordinates().get(i)[0] + "','" + s.getCoordinates().get(i)[1] + "', '" + i + "', '" + s.getUniqueid() + "', '" + c.getName() + "','" + fa.getName() + "','" + fi.getName() + "');");
+						}
+					}
+				}
+			}
+			System.out.println("\n\n");
 		}
 	}
 }

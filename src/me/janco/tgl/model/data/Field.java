@@ -118,6 +118,14 @@ public class Field {
 		return new File(file.getAbsolutePath() + "/Swaths.shp");
 	}
 
+	public float getLongitude() {
+		return longitude;
+	}
+
+	public float getLatitude() {
+		return latitude;
+	}
+
 	public List<String> getSwathsNames() {
 		List<String> data = new ArrayList<String>();
 		for (Swath s : swaths) {
@@ -133,14 +141,24 @@ public class Field {
 		SimpleFeatureIterator it = filedatastore.getFeatureSource().getFeatures().features();
 		while (it.hasNext()) {
 			SimpleFeature s = it.next();
-			DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
+            DefaultFeatureCollection lineCollection = new DefaultFeatureCollection();
 			lineCollection.add(s);
+
+			ArrayList<float[]> coordinates = new ArrayList<float[]>();
+			String coordinatesstring = s.getAttribute(0).toString();
+			coordinatesstring = coordinatesstring.replace("MULTILINESTRING ((", "");
+			coordinatesstring = coordinatesstring.replace("))", "");
+			for(String latlong : coordinatesstring.split(", ")){
+				String[] latlongsplit = latlong.split(" ");
+				coordinates.add(new float[]{Float.parseFloat(latlongsplit[0]), Float.parseFloat(latlongsplit[1])});
+			}
+
 			swaths.add(new Swath((Date) s.getAttribute("Date"), (String) s.getAttribute("Time"),
 					(String) s.getAttribute("Version"), (double) ((int) s.getAttribute("Id")),
 					(String) s.getAttribute("Name"), (double) s.getAttribute("Length"),
 					(double) s.getAttribute("Dist1"), (double) s.getAttribute("Dist2"),
 					(String) s.getAttribute("UniqueID"),
-					new FeatureLayer(lineCollection, style, (String) s.getAttribute("Name"))));
+					new FeatureLayer(lineCollection, style, (String) s.getAttribute("Name")), coordinates));
 		}
 		it.close();
 		filedatastore.dispose();

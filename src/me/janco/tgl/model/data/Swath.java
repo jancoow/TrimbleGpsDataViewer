@@ -1,5 +1,6 @@
 package me.janco.tgl.model.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +12,10 @@ public class Swath {
 	private FeatureLayer featurelayer;
 	private double id, length, dist1, dist2;
 	private String time, version, name, uniqueid;
+	private ArrayList<float[]> coordinates;
 
 	public Swath(Date date, String time, String version, double id, String name, double length, double dist1,
-			double dist2, String uniqueid, FeatureLayer featurelayer) {
+			double dist2, String uniqueid, FeatureLayer featurelayer, ArrayList<float[]> coordinates) {
 		this.date = date;
 		this.time = time;
 		this.version = version;
@@ -24,6 +26,7 @@ public class Swath {
 		this.dist2 = dist2;
 		this.uniqueid = uniqueid;
 		this.featurelayer = featurelayer;
+		this.coordinates = coordinates;
 	}
 
 	public FeatureLayer getFeaturelayer() {
@@ -52,8 +55,23 @@ public class Swath {
 		return uniqueid;
 	}
 
+	public double getDist2() {
+		return dist2;
+	}
+
+	public double getLength() {
+		return length;
+	}
+
+	public double getDist1() {
+		return dist1;
+	}
+
 	public void setName(String newname) {
 		this.name = newname;
 	}
 
+	public ArrayList<float[]> getCoordinates() {
+		return coordinates;
+	}
 }
